@@ -32,10 +32,10 @@ export class EventListComponent implements OnInit {
         //its recomend to not use ajax call in constructor as it might take time so for that we must use 
         // lifecycle @ngInit hook to get the data for services so the code move to ngInt
     }
+
     ngOnInit() {
         this.events = this.eventService.getEvents()
     }
-
 
     handleThumbnailClick(name) {
         /*  toastr.success(name); as its global so we get error in command prompt screen that cannot
