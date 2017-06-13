@@ -46,7 +46,6 @@ export class EventListComponent implements OnInit {
 
 }
 
-
 /*/
 handleClickMe(data){
     console.log(data);
