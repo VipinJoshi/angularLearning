@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import { EventsService } from './shared/event.service';
 import { ToastrService } from '../common/toastr.service'
 
 @Component({
-    selector: 'events-list',
     template: `<div>   
       
       <h1>
@@ -27,15 +27,19 @@ import { ToastrService } from '../common/toastr.service'
 //to show that in the app controller use the selection in app module
 export class EventListComponent implements OnInit {
     events: any[]
-    constructor(private eventService: EventsService, private toastrService: ToastrService) {
+    constructor(private eventService: EventsService, 
+    private toastrService: ToastrService,
+    private route:ActivatedRoute) {
         //events=this.eventService.getEvents();
         //its recomend to not use ajax call in constructor as it might take time so for that we must use 
         // lifecycle @ngInit hook to get the data for services so the code move to ngInt
     }
 
     ngOnInit() {
-        this.events = this.eventService.getEvents()
-    }
+       // this.events = this.eventService.getEvents() this was prior to implementation of observable
+       //this.eventService.getEvents().subscribe(events=>{this.events=events}) ;//this comment when route handler is used in rout.ts
+         this.events=this.route.snapshot.data['evnt']
+}
 
     handleThumbnailClick(name) {
         /*  toastr.success(name); as its global so we get error in command prompt screen that cannot
@@ -45,6 +49,7 @@ export class EventListComponent implements OnInit {
     }
 
 }
+
 
 /*/
 handleClickMe(data){

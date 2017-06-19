@@ -1,9 +1,23 @@
 import { Injectable } from '@angular/core'
+import { Subject } from 'rxjs/Rx';
 
 @Injectable()//this is used to inject a service which want to inject other service in constructor
 export class EventsService {
     getEvents() {
-        return EVENTS;
+        //implement delay to get the data else call this        // return EVENTS;
+
+        let subject = new Subject();//type of observable
+
+        setTimeout(() => { subject.next(EVENTS); subject.complete(); }, 100);
+        //subject.next(EVENTS)adding data to the stream and we use above code for asynchronous
+        return subject; //return objservable
+        /*
+        observable are stream of data they are kind of arrays where data arrives over time
+        */
+    }
+
+    getEvent(id: number) {
+        return EVENTS.find(event => event.id === id);
     }
 }
 
