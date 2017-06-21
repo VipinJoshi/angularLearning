@@ -22,5 +22,17 @@
             </address>
         </div>
     </div>
+<hr>
 
+<div class="row">
+    <div class="col-md-2">
+        <h3 style="margin:0" >Session</h3>
+        </div>
+<div class="col-md-2">
+    <a (click)="addSession()">Add seasion</a>   </div>
+
+</div>
+
+<session-list *ngIf="!addMode"  [sessions]=event?.sessions> </session-list> 
+<create-session *ngIf="addMode"  (saveNewSession)="saveSession($event)" (cancelNewSession)="cancelNewSession()" > </create-session>
 </div>

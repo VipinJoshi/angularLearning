@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Output,EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { Isession } from '../shared/index'
 import {restrictedWords} from '../../common/index'
 
 @Component({
+    
+    selector:'create-session',
     templateUrl: 'app/events/event-details/create-session.component.html',
     styles: [`em{float:right;color:red;padding-left:10px;}
     .error input, .error select ,.error textarea {background:red;}
@@ -15,12 +17,16 @@ import {restrictedWords} from '../../common/index'
 })
 
 export class CreateSessionComponent implements OnInit {
+   
     newSessionForm: FormGroup
     name: FormControl
     presenter: FormControl
     duration: FormControl
     level: FormControl
     abstract: FormControl
+@Output() saveNewSession=new EventEmitter()//this is called from event detail components
+@Output() cancelNewSession=new EventEmitter()
+
 
     ngOnInit() {
         this.name = new FormControl('', Validators.required)
@@ -50,9 +56,14 @@ export class CreateSessionComponent implements OnInit {
             voters: []
         }
 
-        console.log(formValues)
+        this.saveNewSession.emit(session)
+
+       // console.log(formValues)
     }
-    
+
+    cancel(){
+                this.cancelNewSession.emit()
+    }    
 
 
     /*
