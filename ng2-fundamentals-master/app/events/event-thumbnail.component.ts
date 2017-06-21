@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-
+import {IEvent} from './shared/event.model'
 
 @Component({
     selector: 'events-thumbnail',
@@ -13,7 +13,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 
 export class EventThumbnailComponent {
-    @Input() event: any
+    @Input() event: IEvent
 
     /* used in tempelate variable  logFromParent(){
          console.log('hello child you are call from parent')
