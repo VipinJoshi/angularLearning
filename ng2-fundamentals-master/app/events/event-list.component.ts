@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventsService } from './shared/event.service';
-import { ToastrService } from '../common/toastr.service'
 import { IEvent } from './shared/event.model'
 @Component({
     template: `<div>   
@@ -12,8 +11,7 @@ import { IEvent } from './shared/event.model'
     <hr/>
 <div class="row">
 <div *ngFor="let event of events" class="col-md-5">
-    <events-thumbnail (click)="handleThumbnailClick(event.name)"       
-     [event]="event" > </events-thumbnail>
+    <events-thumbnail  [event]="event" > </events-thumbnail>
     </div>
     </div>
     
@@ -28,7 +26,6 @@ import { IEvent } from './shared/event.model'
 export class EventListComponent implements OnInit {
     events: IEvent[]
     constructor(private eventService: EventsService,
-        private toastrService: ToastrService,
         private route: ActivatedRoute) {
         //events=this.eventService.getEvents();
         //its recomend to not use ajax call in constructor as it might take time so for that we must use 
@@ -41,12 +38,14 @@ export class EventListComponent implements OnInit {
         this.events = this.route.snapshot.data['evnt']
     }
 
+/*
     handleThumbnailClick(name) {
         /*  toastr.success(name); as its global so we get error in command prompt screen that cannot
         find the name toastr and also it will make the code untestable so to overcome with that we need 
-        to create our own service and register this toastr there*/
+        to create our own service and register this toastr there
         this.toastrService.success(name)
     }
+    */
 
 }
 

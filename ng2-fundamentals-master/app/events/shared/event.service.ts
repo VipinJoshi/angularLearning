@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core'
-import { Subject,Observable } from 'rxjs/Rx';
-import{IEvent} from './event.model'
+import { Injectable,EventEmitter } from '@angular/core'
+import { Subject, Observable } from 'rxjs/Rx';
+import { IEvent, Isession } from './event.model'
 
 @Injectable()//this is used to inject a service which want to inject other service in constructor
 export class EventsService {
-    getEvents():Observable<IEvent[]> {
+    getEvents(): Observable<IEvent[]> {
         //implement delay to get the data else call this        // return EVENTS;
 
         let subject = new Subject<IEvent[]>();//type of observable
@@ -17,23 +17,46 @@ export class EventsService {
         */
     }
 
-    getEvent(id: number):IEvent {
+    getEvent(id: number): IEvent {
         return EVENTS.find(event => event.id === id);
     }
 
-    saveEvents(event){
-        event.id=999,
-        event.session=[]
+    saveEvents(event) {
+        event.id = 999,
+            event.session = []
         EVENTS.push(event)
     }
 
-    updateEvent(event){
-        let index=EVENTS.findIndex(x=>x.id=event.id)
-        EVENTS[index]=event 
+    updateEvent(event) {
+        let index = EVENTS.findIndex(x => x.id = event.id)
+        EVENTS[index] = event
+    }
+
+    searchSessions(searchTerm: string) {
+        var value = searchTerm.toLocaleLowerCase();
+        var results: Isession[] = [];
+        EVENTS.forEach(event => {
+            var matchingSession = event.sessions.filter(session =>
+                session.name.toLocaleLowerCase().indexOf(value) > -1);
+            matchingSession = matchingSession.map((session: any) => {
+                session.eventId = event.id;
+                return session;
+
+            })
+            results = results.concat(matchingSession);
+        })
+
+        var emitter = new EventEmitter(true);
+
+        setTimeout(() => {
+            emitter.emit(results)
+        }, 100);
+        return emitter;
+
     }
 }
 
-const EVENTS :IEvent[]= [
+const EVENTS: IEvent[] = [
     {
         id: 1,
         name: 'Angular Connect',
@@ -49,7 +72,7 @@ const EVENTS :IEvent[]= [
         sessions: [
             {
                 id: 1,
-                name: "Using Angular 4 Pipes",
+                name: "Using Angular 4 pipes",
                 presenter: "Peter Bacon Darwin",
                 duration: 1,
                 level: "Intermediate",

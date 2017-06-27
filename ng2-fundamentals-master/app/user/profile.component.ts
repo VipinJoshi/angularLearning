@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit,Inject } from '@angular/core'
 import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router'
-import { ToastrService } from '../common/toastr.service'
+import { TOASTER_TOKEN,Toastr } from '../common/toastr.service'
 
 @Component({
   templateUrl: 'app/user/profile.component.html',
   styles: [
     `em{float:right;color:red;padding-left:10px;}
-    .error input{background:red;}
+    .error input{backgrou nd:red;}
     .error::webkit-input-placeholder {color:#999;}
     .error::-moz-placeholder {color:#999;}
     .error:-moz-placeholder {color:#999;}
@@ -21,7 +21,10 @@ export class ProfileComponent implements OnInit {
  private firstName:FormControl
  private lastName:FormControl
   profileForm: FormGroup  //name should be same as in html
-  constructor(private auth: AuthService, private router: Router, private toastr: ToastrService) {
+  constructor(private auth: AuthService, private router: Router,
+  @Inject(TOASTER_TOKEN) private toastr:Toastr
+  // private toastr: ToastrService before opaque token
+  ) {
 
   }
   ngOnInit() {
@@ -39,7 +42,7 @@ export class ProfileComponent implements OnInit {
   updateProfile(formsValue) {
     if (this.profileForm.valid) {
       this.auth.updateUser(formsValue.firstName, formsValue.lastName)
-      this.router.navigate(['events'])
+      //this.router.navigate(['events'])
       this.toastr.success("information updated successfully", "profile");
     }
     else {
