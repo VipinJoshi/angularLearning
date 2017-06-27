@@ -13,7 +13,7 @@ export class AuthService {
 
      }
     }
-    isAuthenicated(){
+    isAuthenticated(){
         return !!this.currentUser;
     }
 

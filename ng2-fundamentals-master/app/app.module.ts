@@ -10,8 +10,8 @@ import {
     TOASTER_TOKEN,
     Toastr,
     CollapsibleWellComponent,
-    JQ_TOKEN, 
-    SimpleModalComponent, 
+    JQ_TOKEN,
+    SimpleModalComponent,
     ModalTrigerDirective
 } from './common/index';
 import {
@@ -22,10 +22,11 @@ import {
     CreateEventComponent,
     EventRouteActivator,
     EventsListResolver,
-    CreateSessionComponent, SessionListComponent, DurationPipe
+    CreateSessionComponent, SessionListComponent, DurationPipe, UpvoteComponent
+    , VoterService,ValidateLocation
 } from './events/index'
 import { Error404Component } from './errors/404.component'
-import { AuthService } from './user/auth.service'
+import { AuthService } from './user/index'
 
 declare let toastr: Toastr
 declare let jQuery: Object
@@ -46,18 +47,20 @@ declare let jQuery: Object
         Error404Component,
         CreateSessionComponent,
         SessionListComponent,
-        CollapsibleWellComponent, 
+        CollapsibleWellComponent,
         DurationPipe,
         SimpleModalComponent,
-        ModalTrigerDirective
+        ModalTrigerDirective, UpvoteComponent,ValidateLocation
     ],
     bootstrap: [EventsAppComponent],
     providers: [EventsService,
-       
+
         EventRouteActivator,
         EventsListResolver,
         AuthService,
-         {
+        VoterService,
+        
+        {
             provide: TOASTER_TOKEN
             , useValue: toastr
         },
@@ -65,7 +68,11 @@ declare let jQuery: Object
             provide: JQ_TOKEN,
             useValue: jQuery
         },
-        { provide: 'canDeactivateCreateEvent', useValue: checkDirtyStateOfEvent }]
+        {
+            provide: 'canDeactivateCreateEvent',
+            useValue: checkDirtyStateOfEvent
+        }
+        ]
 })
 
 export class AppModule { }
