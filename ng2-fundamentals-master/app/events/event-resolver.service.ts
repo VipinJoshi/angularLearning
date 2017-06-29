@@ -4,17 +4,17 @@ load page and than wait for data
 */
 
 import {Injectable} from '@angular/core';
-import {Resolve} from '@angular/router';
+import {Resolve,ActivatedRouteSnapshot} from '@angular/router';
 import {EventsService} from './shared/event.service';
 
 @Injectable()
-export class EventsListResolver implements Resolve<any>{
+export class EventsResolver implements Resolve<any>{
     constructor(private eventService:EventsService){
 
     }
     //here we call the synchronous method call like ajax call
-    resolve() {
-      return this.eventService.getEvents()
+    resolve(route:ActivatedRouteSnapshot) {
+      return this.eventService.getEvent(route.params['id'])
     }
 
 

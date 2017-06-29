@@ -1,10 +1,20 @@
-import { Injectable,EventEmitter } from '@angular/core'
+import { Injectable, EventEmitter } from '@angular/core'
 import { Subject, Observable } from 'rxjs/Rx';
 import { IEvent, Isession } from './event.model'
+import { Http, Response,Headers,RequestOptions } from '@angular/http'
 
 @Injectable()//this is used to inject a service which want to inject other service in constructor
 export class EventsService {
+    constructor(private http: Http) {
+
+    }
     getEvents(): Observable<IEvent[]> {
+        return this.http.get('api/events').map((response: Response) => {
+            return <IEvent[]>response.json();
+        }
+
+        ).catch(this.handleError)
+        /*
         //implement delay to get the data else call this        // return EVENTS;
 
         let subject = new Subject<IEvent[]>();//type of observable
@@ -12,27 +22,50 @@ export class EventsService {
         setTimeout(() => { subject.next(EVENTS); subject.complete(); }, 100);
         //subject.next(EVENTS)adding data to the stream and we use above code for asynchronous
         return subject; //return objservable
-        /*
+        
         observable are stream of data they are kind of arrays where data arrives over time
         */
     }
+    private handleError(error: Response) {
+        return Observable.throw(error.statusText)
 
-    getEvent(id: number): IEvent {
-        return EVENTS.find(event => event.id === id);
+    }
+    //to call asynchronous we use observable
+    getEvent(id: number): Observable<IEvent> {
+        // return EVENTS.find(event => event.id === id);
+        return this.http.get('api/events/' + id).map((response: Response) => {
+            return <IEvent>response.json();
+        }
+
+        ).catch(this.handleError)
     }
 
-    saveEvents(event) {
-        event.id = 999,
+    saveEvents(event):Observable<IEvent> {
+        let hearders=new Headers({'Content-Type':'application/json'});
+        let options=new RequestOptions({headers:hearders})
+        return this.http.post('/api/events',event,options).map((response:Response)=>{
+            return response.json();
+        }).catch(this.handleError);
+         //u can use JSON.stringifu but in this version its not required
+
+        /*event.id = 999,
             event.session = []
-        EVENTS.push(event)
+        EVENTS.push(event)*/
     }
-
+/* not used now as save will achieve it in api call
     updateEvent(event) {
         let index = EVENTS.findIndex(x => x.id = event.id)
         EVENTS[index] = event
     }
-
+*/
     searchSessions(searchTerm: string) {
+          return this.http.get('api/sessions/search/?search='+searchTerm)
+          .map((response: Response) => {
+            return response.json();
+        }
+
+        ).catch(this.handleError)
+        /*
         var value = searchTerm.toLocaleLowerCase();
         var results: Isession[] = [];
         EVENTS.forEach(event => {
@@ -52,7 +85,7 @@ export class EventsService {
             emitter.emit(results)
         }, 100);
         return emitter;
-
+*/
     }
 }
 

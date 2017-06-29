@@ -6,7 +6,7 @@ import { OpaqueToken } from '@angular/core'
 
 export let TOASTER_TOKEN = new OpaqueToken('toastr');//this is javascript object
 
-export interface Toastr {
+export interface IToastr {
     success(message: string, title?: string): void
     warning(message: string, title?: string): void
     info(message: string, title?: string): void

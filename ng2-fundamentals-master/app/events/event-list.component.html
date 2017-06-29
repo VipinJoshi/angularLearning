@@ -6,8 +6,8 @@
             <div>Time: {{event?.time}} </div>
             <div>Price: {{event?.price | currency:'INR':true }} </div>
 
-            <div><span> Location :{{event.location.address}}</span> 
-            <span class="pad-left">{{event.location.city}}, {{event.location.country}}</span>
+            <div><span> Location :{{event.location?.address}}</span> 
+            <span class="pad-left">{{event.location?.city}}, {{event.location?.country}}</span>
     </div>
     </div>
     

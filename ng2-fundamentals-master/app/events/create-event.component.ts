@@ -24,10 +24,12 @@ export class CreateEventComponent {
     }
 
     saveEvent(formValue) {
-        this.eventsService.saveEvents(formValue)
-        this.isDirty = false;
+        this.eventsService.saveEvents(formValue).subscribe(event => {
+            this.isDirty = false;
 
-        this.router.navigate(['/events'])
+            this.router.navigate(['/events'])
+
+        })
 
     }
 }

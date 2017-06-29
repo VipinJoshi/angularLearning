@@ -1,8 +1,8 @@
-import { Component, OnInit,Inject } from '@angular/core'
+import { Component, OnInit, Inject } from '@angular/core'
 import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router'
-import { TOASTER_TOKEN,Toastr } from '../common/toastr.service'
+import { TOASTER_TOKEN, IToastr } from '../common/toastr.service'
 
 @Component({
   templateUrl: 'app/user/profile.component.html',
@@ -18,18 +18,18 @@ import { TOASTER_TOKEN,Toastr } from '../common/toastr.service'
 
 })
 export class ProfileComponent implements OnInit {
- private firstName:FormControl
- private lastName:FormControl
+  private firstName: FormControl
+  private lastName: FormControl
   profileForm: FormGroup  //name should be same as in html
   constructor(private auth: AuthService, private router: Router,
-  @Inject(TOASTER_TOKEN) private toastr:Toastr
-  // private toastr: ToastrService before opaque token
+    @Inject(TOASTER_TOKEN) private toastr: IToastr
+    // private toastr: ToastrService before opaque token
   ) {
 
   }
   ngOnInit() {
     //create form controls
-    this.firstName = new FormControl(this.auth.currentUser.firstName, [Validators.required,Validators.pattern('[a-zA-Z].*')])//for multiple validator we pass that as an array
+    this.firstName = new FormControl(this.auth.currentUser.firstName, [Validators.required, Validators.pattern('[a-zA-Z].*')])//for multiple validator we pass that as an array
     this.lastName = new FormControl(this.auth.currentUser.lastName, Validators.required)
 
     //now we need a form group that uses these controls
@@ -41,23 +41,29 @@ export class ProfileComponent implements OnInit {
 
   updateProfile(formsValue) {
     if (this.profileForm.valid) {
-      this.auth.updateUser(formsValue.firstName, formsValue.lastName)
+      this.auth.updateUser(formsValue.firstName, formsValue.lastName).subscribe(() => {
+        this.toastr.success("information updated successfully", "profile");
+      })
       //this.router.navigate(['events'])
-      this.toastr.success("information updated successfully", "profile");
     }
     else {
       this.toastr.warning("all details are not passed")
     }
   }
-validateLastName(){
- return (this.lastName.valid || this.lastName.untouched)
-}
-validateFirstName(){
- return (this.firstName.valid || this.firstName .untouched)
+  validateLastName() {
+    return (this.lastName.valid || this.lastName.untouched)
+  }
+  validateFirstName() {
+    return (this.firstName.valid || this.firstName.untouched)
 
-}
+  }
   cancel() {
     this.router.navigate(['events'])
+  }
+
+  logout(){
+      this.auth.logOut().subscribe(()=>{
+        this.router.navigate(['/user/login'])});
   }
 
 }

@@ -1,6 +1,7 @@
 //this is where bootstrapping is done by registering our component
 import { NgModule } from '@angular/core';
 import { appRoutes } from './routes';
+import { HttpModule } from '@angular/http'
 import { EventsAppComponent } from './event-app.component'
 import { RouterModule } from '@angular/router'
 import { BrowserModule } from '@angular/platform-browser';
@@ -8,7 +9,7 @@ import { NavBarComponent } from './nav/navbar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {
     TOASTER_TOKEN,
-    Toastr,
+    IToastr,
     CollapsibleWellComponent,
     JQ_TOKEN,
     SimpleModalComponent,
@@ -20,15 +21,15 @@ import {
     EventsService,
     EventDetailsComponent,
     CreateEventComponent,
-    EventRouteActivator,
+    EventsResolver,
     EventsListResolver,
     CreateSessionComponent, SessionListComponent, DurationPipe, UpvoteComponent
-    , VoterService,ValidateLocation
+    , VoterService, ValidateLocation
 } from './events/index'
 import { Error404Component } from './errors/404.component'
 import { AuthService } from './user/index'
 
-declare let toastr: Toastr
+declare let toastr: IToastr
 declare let jQuery: Object
 @NgModule({
     imports: [
@@ -36,7 +37,7 @@ declare let jQuery: Object
         FormsModule,
         ReactiveFormsModule,
         RouterModule.forRoot(appRoutes)
-
+        , HttpModule
     ],
     declarations: [EventsAppComponent,
         EventListComponent,
@@ -50,16 +51,16 @@ declare let jQuery: Object
         CollapsibleWellComponent,
         DurationPipe,
         SimpleModalComponent,
-        ModalTrigerDirective, UpvoteComponent,ValidateLocation
+        ModalTrigerDirective, UpvoteComponent, ValidateLocation
     ],
     bootstrap: [EventsAppComponent],
     providers: [EventsService,
 
-        EventRouteActivator,
+        EventsResolver,
         EventsListResolver,
         AuthService,
         VoterService,
-        
+
         {
             provide: TOASTER_TOKEN
             , useValue: toastr
@@ -72,7 +73,7 @@ declare let jQuery: Object
             provide: 'canDeactivateCreateEvent',
             useValue: checkDirtyStateOfEvent
         }
-        ]
+    ]
 })
 
 export class AppModule { }
